@@ -46,6 +46,11 @@ func LoadConfig() (*Config, error) {
 			MaxIdleConns:    viper.GetInt("DB_MAX_IDLE_CONNS"),
 			ConnMaxLifetime: time.Duration(viper.GetInt("DB_CONN_MAX_LIFETIME")) * time.Second,
 		},
+		Logger: LoggerConfig{
+			Level:      viper.GetString("LOG_LEVEL"),
+			OutputPath: viper.GetString("LOG_OUTPUT_PATH"),
+			ErrorPath:  viper.GetString("LOG_ERROR_PATH"),
+		},
 	}
 	return config, nil
 }
@@ -83,4 +88,8 @@ func setDefaults() {
 	viper.SetDefault("FIBER_WRITE_TIMEOUT", 10)
 	viper.SetDefault("FIBER_PREFORK", false)
 	viper.SetDefault("FIBER_BODY_LIMIT", 4194304) // 4MB
+
+	viper.SetDefault("LOG_LEVEL", "info")
+	viper.SetDefault("LOG_OUTPUT_PATH", "./storage/logs/app.log")
+	viper.SetDefault("LOG_ERROR_PATH", "./storage/logs/error.log")
 }

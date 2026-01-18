@@ -1,7 +1,10 @@
 package fiber
 
 import (
+	"errors"
+
 	"github.com/bagusyanuar/pos-sytem-be/config"
+	"github.com/bagusyanuar/pos-sytem-be/pkg/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -32,17 +35,22 @@ func NewFiberApp(cfg *config.FiberConfig) *fiber.App {
 	return app
 }
 
-func customErrorHandler(ctx *fiber.Ctx, err error) error {
+func customErrorHandler(c *fiber.Ctx, err error) error {
 	code := fiber.StatusInternalServerError
-	message := "Internal Server Error"
-
-	if e, ok := err.(*fiber.Error); ok {
+	var e *fiber.Error
+	if errors.As(err, &e) {
 		code = e.Code
-		message = e.Message
 	}
-
-	return ctx.Status(code).JSON(fiber.Map{
-		"success": false,
-		"error":   message,
-	})
+	switch code {
+	case fiber.StatusBadRequest:
+		return c.Status(code).JSON(response.BadRequest(err.Error()))
+	case fiber.StatusUnauthorized:
+		return c.Status(code).JSON(response.Unauthorized(err.Error()))
+	case fiber.StatusForbidden:
+		return c.Status(code).JSON(response.Forbidden(err.Error()))
+	case fiber.StatusNotFound:
+		return c.Status(code).JSON(response.NotFound("route"))
+	default:
+		return c.Status(code).JSON(response.InternalServerError(err))
+	}
 }

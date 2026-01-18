@@ -6,6 +6,7 @@ type Config struct {
 	App      AppConfig
 	Fiber    FiberConfig
 	Database DatabaseConfig
+	Logger   LoggerConfig
 }
 
 type AppConfig struct {
@@ -33,4 +34,10 @@ type DatabaseConfig struct {
 	MaxOpenConns    int
 	MaxIdleConns    int
 	ConnMaxLifetime time.Duration
+}
+
+type LoggerConfig struct {
+	Level      string
+	OutputPath string
+	ErrorPath  string
 }

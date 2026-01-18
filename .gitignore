@@ -36,10 +36,6 @@ go.work
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-storage/logs/*
-!storage/logs/.gitkeep
 
 # Temporary files
 storage/temp/*
@@ -47,3 +43,12 @@ storage/temp/*
 
 # Air (hot reload)
 tmp/
+
+# Logs
+storage/logs/*.log
+storage/logs/
+*.log
+
+# .gitignore
+storage/logs/*.log
+!storage/logs/.gitkeep
