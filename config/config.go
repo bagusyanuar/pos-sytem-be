@@ -29,11 +29,12 @@ type DatabaseConfig struct {
 	Port            string
 	User            string
 	Password        string
-	DBName          string
+	Name            string
 	SSLMode         string
 	MaxOpenConns    int
 	MaxIdleConns    int
 	ConnMaxLifetime time.Duration
+	LogMode         bool
 }
 
 type LoggerConfig struct {

@@ -40,11 +40,12 @@ func LoadConfig() (*Config, error) {
 			Port:            viper.GetString("DB_PORT"),
 			User:            viper.GetString("DB_USER"),
 			Password:        viper.GetString("DB_PASSWORD"),
-			DBName:          viper.GetString("DB_NAME"),
+			Name:            viper.GetString("DB_NAME"),
 			SSLMode:         viper.GetString("DB_SSLMODE"),
 			MaxOpenConns:    viper.GetInt("DB_MAX_OPEN_CONNS"),
 			MaxIdleConns:    viper.GetInt("DB_MAX_IDLE_CONNS"),
 			ConnMaxLifetime: time.Duration(viper.GetInt("DB_CONN_MAX_LIFETIME")) * time.Second,
+			LogMode:         viper.GetBool("DB_LOG_MODE"),
 		},
 		Logger: LoggerConfig{
 			Level:      viper.GetString("LOG_LEVEL"),

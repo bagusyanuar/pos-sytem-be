@@ -10,6 +10,7 @@ import (
 	"github.com/bagusyanuar/pos-sytem-be/config"
 	"github.com/bagusyanuar/pos-sytem-be/internal/delivery/http/handler"
 	"github.com/bagusyanuar/pos-sytem-be/internal/delivery/http/routes"
+	"github.com/bagusyanuar/pos-sytem-be/internal/infrastructure/database"
 	"github.com/bagusyanuar/pos-sytem-be/internal/infrastructure/fiber"
 	"github.com/bagusyanuar/pos-sytem-be/pkg/logger"
 )
@@ -25,6 +26,18 @@ func main() {
 		log.Fatal("Failed to initialize logger:", err)
 	}
 	defer appLogger.Sync()
+
+	db, err := database.NewPostgresDB(&cfg.Database)
+
+	if err != nil {
+		appLogger.Fatal("Failed to connect to database:", err)
+	}
+
+	defer func() {
+		if err := database.CloseDB(db); err != nil {
+			appLogger.Error("Failed to close database:", err)
+		}
+	}()
 
 	fiberApp := fiber.NewFiberApp(&cfg.Fiber)
 	handlers := handler.NewHandlers(cfg)
